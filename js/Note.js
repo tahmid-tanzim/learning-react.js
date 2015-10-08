@@ -49,15 +49,13 @@ var Board = React.createClass({
     },
     getInitialState: function () {
         return {
-            notes: [
-                'Call Fatiha',
-                'Email Obin',
-                'Project Complete',
-                'Study GRE',
-                'Send proposal',
-                'Learn React'
-            ]
+            notes: []
         };
+    },
+    add: function (text) {
+        var arr = this.state.notes;
+        arr.push(text);
+        this.setState({notes: arr});
     },
     update: function (newText, i) {
         var arr = this.state.notes;
@@ -76,7 +74,11 @@ var Board = React.createClass({
                       onRemove={this.remove}>{note}</Note>);
     },
     render: function () {
-        return (<div className="board">{this.state.notes.map(this.eachNote)}</div>);
+        return (<div className="board">
+            {this.state.notes.map(this.eachNote)}
+            <button className="btn btn-success btn-sm glyphicon glyphicon-plus"
+                    onClick={this.add.bind(null, "New Note")}/>
+        </div>);
     }
 });
 
