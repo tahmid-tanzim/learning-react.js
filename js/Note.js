@@ -12,6 +12,9 @@ var Note = React.createClass({
             transform: 'rotate(' + this.randomBetween(-10, 10) + 'deg)'
         }
     },
+    componentDidMount: function() {
+        $(this.getDOMNode()).draggable();
+    },
     save: function () {
         this.props.onChange(this.refs.newText.getDOMNode().value, this.props.index);
         this.setState({editing: false});
@@ -65,6 +68,18 @@ var Board = React.createClass({
     nextId: function () {
         this.uniqueId = this.uniqueId || 0;
         return this.uniqueId++;
+    },
+    componentWillMount: function(){
+        var self = this;
+        if(this.props.count) {
+            $.getJSON("http://baconipsum.com/api/?type=all-meat&sentences=" +
+            this.props.count + "&start-with-lorem=1&callback=?",function(results){
+                results[0].split('. ').forEach(function(sentence){
+                    self.add(sentence.substring(0,30));
+                });
+            });
+        }
+
     },
     add: function (newText) {
         var arr = this.state.notes;
