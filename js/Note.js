@@ -3,15 +3,14 @@ var Note = React.createClass({
         return {editing: false};
     },
     save: function () {
-        var val = this.refs.newText.getDOMNode().value;
-        alert("TODO: Save note value " + val);
+        this.props.onChange(this.refs.newText.getDOMNode().value, this.props.index);
         this.setState({editing: false});
     },
     edit: function () {
         this.setState({editing: true});
     },
     remove: function () {
-        alert("Removing Note");
+        this.props.onRemove(this.props.index);
     },
     renderDisplay: function () {
         return (
@@ -54,22 +53,30 @@ var Board = React.createClass({
                 'Call Fatiha',
                 'Email Obin',
                 'Project Complete',
-                'Make doctor\'s appoinment',
                 'Study GRE',
                 'Send proposal',
                 'Learn React'
             ]
         };
     },
+    update: function (newText, i) {
+        var arr = this.state.notes;
+        arr[i] = newText;
+        this.setState({notes: arr});
+    },
+    remove: function (i) {
+        var arr = this.state.notes;
+        arr.splice(i, 1);
+        this.setState({notes: arr});
+    },
+    eachNote: function (note, i) {
+        return (<Note key={i}
+                      index={i}
+                      onChange={this.update}
+                      onRemove={this.remove}>{note}</Note>);
+    },
     render: function () {
-        return (<div className="board">
-                {
-                    this.state.notes.map(function (note, i) {
-                        return (<Note key={i}>{note}</Note>);
-                    })
-                }
-            </div>
-        );
+        return (<div className="board">{this.state.notes.map(this.eachNote)}</div>);
     }
 });
 
