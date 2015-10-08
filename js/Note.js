@@ -37,13 +37,41 @@ var Note = React.createClass({
     }
 });
 
-React.render(<Note>Hello World</Note>, document.getElementById('react-container'));
+var Board = React.createClass({
+    propTypes: {
+        count: function (props, propName) {
+            if (typeof props[propName] !== "number") {
+                return new Error("The count property must be a number");
+            }
+            if (props[propName] > 15) {
+                return new Error("Creating more then " + props[propName] + " notes is NOT allowed!");
+            }
+        }
+    },
+    getInitialState: function () {
+        return {
+            notes: [
+                'Call Fatiha',
+                'Email Obin',
+                'Project Complete',
+                'Make doctor\'s appoinment',
+                'Study GRE',
+                'Send proposal',
+                'Learn React'
+            ]
+        };
+    },
+    render: function () {
+        return (<div className="board">
+                {
+                    this.state.notes.map(function (note, i) {
+                        return (<Note key={i}>{note}</Note>);
+                    })
+                }
+            </div>
+        );
+    }
+});
 
-
-
-
-
-
-
-
+React.render(<Board count={20}/>, document.getElementById('react-container'));
 
