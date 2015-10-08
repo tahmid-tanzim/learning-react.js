@@ -1,34 +1,37 @@
 var Note = React.createClass({
+    getInitialState: function () {
+        return {editing: false};
+    },
+    save: function () {
+        this.setState({editing: false});
+    },
     edit: function () {
-        alert("Editing Note");
+        this.setState({editing: true});
     },
     remove: function () {
         alert("Removing Note");
     },
-    getInitialState: function () {
-        return {checked: true};
-    },
-    handleCheck: function () {
-        this.setState({checked: !this.state.checked});
-    },
-    render: function () {
+    renderDisplay: function () {
         return (
-            <div>
-                <div className="note">
-                    <p>{this.props.children}</p>
+            <div className="note">
+                <p>{this.props.children}</p>
                     <span>
                         <button onClick={this.edit} className="btn btn-primary glyphicon glyphicon-pencil"/>
                         <button onClick={this.remove} className="btn btn-danger glyphicon glyphicon-trash"/>
                     </span>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.checked}/> This
-                        box is {this.state.checked ? "checked" : "unchecked"}
-                    </label>
-                </div>
             </div>
         );
+    },
+    renderForm: function () {
+        return (
+            <div className="note">
+                <textarea defaultValue={this.props.children} className="form-control"></textarea>
+                <button onClick={this.save} className="btn btn-success btn-sm glyphicon glyphicon-floppy-disk"/>
+            </div>
+        );
+    },
+    render: function () {
+        return (this.state.editing ? this.renderForm() : this.renderDisplay());
     }
 });
 
